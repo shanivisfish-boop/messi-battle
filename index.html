@@ -1,0 +1,1257 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Messi Battle ⚽</title>
+
+<style>
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background: linear-gradient(135deg, #dff6ff, #ffffff, #dff1ff);
+  color: #123;
+  min-height: 100vh;
+}
+
+header {
+  background: linear-gradient(135deg, #75bde8, #ffffff);
+  padding: 22px 15px;
+  text-align: center;
+  border-bottom: 3px solid #78bfe8;
+}
+
+header h1 {
+  margin: 0;
+  font-size: 32px;
+}
+
+header p {
+  margin: 8px 0 0;
+  font-size: 16px;
+}
+
+nav {
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+  flex-wrap: wrap;
+  padding: 12px;
+  background: white;
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+
+nav button {
+  border: none;
+  border-radius: 20px;
+  padding: 10px 16px;
+  background: #e4f5ff;
+  color: #12618b;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+nav button:hover {
+  background: #bfe7fa;
+}
+
+.page {
+  display: none;
+  padding: 20px 15px 50px;
+  max-width: 700px;
+  margin: auto;
+}
+
+.page.active {
+  display: block;
+}
+
+.card {
+  background: rgba(255,255,255,0.95);
+  border-radius: 22px;
+  padding: 22px;
+  margin: 15px 0;
+  box-shadow: 0 5px 20px rgba(0,0,0,0.08);
+  text-align: center;
+}
+
+.big {
+  font-size: 55px;
+}
+
+button.main {
+  width: 100%;
+  border: none;
+  border-radius: 18px;
+  padding: 15px;
+  margin: 7px 0;
+  background: linear-gradient(135deg, #4ba9df, #79c9f0);
+  color: white;
+  font-size: 17px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+button.main:hover {
+  transform: scale(1.01);
+}
+
+button.secondary {
+  width: 100%;
+  border: none;
+  border-radius: 18px;
+  padding: 14px;
+  margin: 7px 0;
+  background: #e8f6ff;
+  color: #17658d;
+  font-size: 16px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+input {
+  width: 100%;
+  padding: 14px;
+  border: 2px solid #b9dff2;
+  border-radius: 15px;
+  font-size: 16px;
+  margin: 7px 0;
+  text-align: center;
+}
+
+h2 {
+  color: #17658d;
+}
+
+.score {
+  font-size: 20px;
+  font-weight: bold;
+  color: #17658d;
+}
+
+.question {
+  font-size: 22px;
+  font-weight: bold;
+  line-height: 1.5;
+  margin: 20px 0;
+}
+
+.answer {
+  width: 100%;
+  padding: 14px;
+  margin: 6px 0;
+  border: 2px solid #c6e5f4;
+  border-radius: 15px;
+  background: white;
+  cursor: pointer;
+  font-size: 16px;
+}
+
+.answer:hover {
+  background: #eaf8ff;
+}
+
+.correct {
+  background: #c9f7d7 !important;
+  border-color: #42b96b !important;
+}
+
+.wrong {
+  background: #ffd2d2 !important;
+  border-color: #e85b5b !important;
+}
+
+.timer {
+  font-size: 30px;
+  font-weight: bold;
+  color: #e26a6a;
+}
+
+.progress {
+  height: 10px;
+  background: #e4eef3;
+  border-radius: 20px;
+  overflow: hidden;
+  margin: 15px 0;
+}
+
+.progress div {
+  height: 100%;
+  background: #4ba9df;
+  width: 0%;
+  transition: width 0.3s;
+}
+
+.stat {
+  display: flex;
+  justify-content: space-between;
+  padding: 13px;
+  border-bottom: 1px solid #e4eef3;
+}
+
+.badge {
+  background: #e9f7ff;
+  border-radius: 15px;
+  padding: 12px;
+  margin: 7px 0;
+}
+
+.hidden {
+  display: none !important;
+}
+
+footer {
+  text-align: center;
+  padding: 25px;
+  color: #56809a;
+}
+</style>
+</head>
+
+<body>
+
+<header>
+  <h1>⚽ Messi Battle 🏆</h1>
+  <p>כמה את באמת יודעת על ליאו מסי?</p>
+</header>
+
+<nav>
+  <button onclick="showPage('home')">🏠 בית</button>
+  <button onclick="showPage('games')">🎮 משחקים</button>
+  <button onclick="showPage('info')">📚 מידע</button>
+  <button onclick="showPage('stats')">🏆 הישגים</button>
+</nav>
+
+<!-- HOME -->
+<section id="home" class="page active">
+
+  <div class="card">
+    <div class="big">🐐</div>
+    <h2>ברוכה הבאה ל-Messi Battle!</h2>
+    <p>
+      כאן תוכלי לשחק, לענות על שאלות ולבדוק כמה את מכירה את מסי.
+    </p>
+
+    <button class="main" onclick="showPage('games')">
+      🎮 להתחיל לשחק
+    </button>
+
+    <button class="secondary" onclick="playSound()">
+      🔊 בדיקת צליל
+    </button>
+  </div>
+
+  <div class="card">
+    <h2>⭐ השיא שלך</h2>
+    <div class="score" id="homeBest">0 נקודות</div>
+  </div>
+
+</section>
+
+
+<!-- GAMES -->
+<section id="games" class="page">
+
+  <div class="card" id="gameMenu">
+
+    <h2>🎮 בחרי משחק</h2>
+
+    <button class="main" onclick="startGame('quiz')">
+      🧠 חידון מסי
+    </button>
+
+    <button class="main" onclick="startGame('truefalse')">
+      ✅❌ נכון או לא נכון
+    </button>
+
+    <button class="main" onclick="startGame('speed')">
+      ⚡ משחק מהירות
+    </button>
+
+    <button class="main" onclick="startGame('streak')">
+      🔥 רצף תשובות
+    </button>
+
+    <button class="main" onclick="startGame('test')">
+      🏆 מבחן מסי
+    </button>
+
+    <hr>
+
+    <h2>👥 עם חברים</h2>
+
+    <button class="secondary" onclick="createRoom()">
+      ➕ צור חדר
+    </button>
+
+    <input id="roomInput" placeholder="הכניסי קוד חדר">
+
+    <button class="secondary" onclick="joinRoom()">
+      🚪 הצטרפי לחדר
+    </button>
+
+    <p id="roomMessage"></p>
+
+  </div>
+
+
+  <div class="card hidden" id="gameBox">
+
+    <div class="score">
+      נקודות: <span id="gameScore">0</span>
+    </div>
+
+    <div id="timerBox" class="timer hidden">
+      ⏱️ <span id="timer">15</span>
+    </div>
+
+    <div class="progress">
+      <div id="progressBar"></div>
+    </div>
+
+    <div id="question" class="question"></div>
+
+    <div id="answers"></div>
+
+    <p id="feedback"></p>
+
+    <button class="secondary hidden" id="nextButton" onclick="nextQuestion()">
+      ➡️ שאלה הבאה
+    </button>
+
+    <button class="secondary" onclick="quitGame()">
+      🏠 יציאה מהמשחק
+    </button>
+
+  </div>
+
+
+  <div class="card hidden" id="resultBox">
+
+    <div class="big">🏆</div>
+
+    <h2>סיימת!</h2>
+
+    <p class="score">
+      קיבלת <span id="finalScore">0</span> נקודות
+    </p>
+
+    <p id="resultText"></p>
+
+    <button class="main" onclick="restartGame()">
+      🔄 לשחק שוב
+    </button>
+
+    <button class="secondary" onclick="showPage('games')">
+      🎮 לבחור משחק אחר
+    </button>
+
+  </div>
+
+</section>
+
+
+<!-- INFO -->
+<section id="info" class="page">
+
+  <div class="card">
+    <div class="big">⚽</div>
+    <h2>ליאו מסי</h2>
+
+    <p>
+      ליאו מסי הוא אחד משחקני הכדורגל המפורסמים והמצליחים ביותר
+      בהיסטוריה של המשחק.
+    </p>
+
+    <div class="badge">🇦🇷 נבחרת: ארגנטינה</div>
+    <div class="badge">🏆 זכייה במונדיאל: 2022</div>
+    <div class="badge">🥇 כדור הזהב: מספר זכיות</div>
+    <div class="badge">⚽ עמדה: התקפה</div>
+    <div class="badge">👟 רגל חזקה: שמאל</div>
+  </div>
+
+  <div class="card">
+    <h2>🌟 דברים מפורסמים</h2>
+
+    <p>• זכייה במונדיאל עם ארגנטינה</p>
+    <p>• קריירה ארוכה בברצלונה</p>
+    <p>• זכיות רבות בתארים אישיים וקבוצתיים</p>
+    <p>• סגנון משחק המבוסס על שליטה בכדור ודריבל</p>
+  </div>
+
+</section>
+
+
+<!-- STATS -->
+<section id="stats" class="page">
+
+  <div class="card">
+
+    <h2>🏆 ההישגים שלי</h2>
+
+    <div class="stat">
+      <span>סה"כ נקודות</span>
+      <b id="totalScore">0</b>
+    </div>
+
+    <div class="stat">
+      <span>משחקים</span>
+      <b id="gamesPlayed">0</b>
+    </div>
+
+    <div class="stat">
+      <span>שיא</span>
+      <b id="bestScore">0</b>
+    </div>
+
+    <div class="stat">
+      <span>תשובות נכונות</span>
+      <b id="correctAnswers">0</b>
+    </div>
+
+  </div>
+
+  <div class="card">
+    <h2>🥇 הישגים</h2>
+
+    <div id="achievements">
+      <div class="badge">
+        🎮 שחקנית מתחילה
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <button class="secondary" onclick="resetStats()">
+      🗑️ איפוס הישגים
+    </button>
+  </div>
+
+</section>
+
+
+<footer>
+  Messi Battle ⚽💙
+</footer>
+
+
+<script>
+
+const questions = [
+
+{
+ q:"באיזו מדינה נולד ליאו מסי?",
+ a:["ארגנטינה","ספרד","ברזיל","איטליה"],
+ c:0
+},
+
+{
+ q:"באיזו עיר נולד מסי?",
+ a:["רוסאריו","בואנוס איירס","מדריד","ברצלונה"],
+ c:0
+},
+
+{
+ q:"מהי הרגל החזקה של מסי?",
+ a:["שמאל","ימין","שתיהן באותה מידה","אף אחת"],
+ c:0
+},
+
+{
+ q:"באיזו נבחרת משחק מסי?",
+ a:["ארגנטינה","ספרד","אורוגוואי","ברזיל"],
+ c:0
+},
+
+{
+ q:"באיזו שנה ארגנטינה זכתה במונדיאל האחרון שלה עם מסי?",
+ a:["2022","2018","2014","2010"],
+ c:0
+},
+
+{
+ q:"באיזה מועדון מסי שיחק במשך רוב הקריירה שלו בתחילת דרכו?",
+ a:["ברצלונה","ריאל מדריד","יובנטוס","ליברפול"],
+ c:0
+},
+
+{
+ q:"מהו הכינוי המפורסם של מסי?",
+ a:["הפרעוש","הקוסם","המלך","הברק"],
+ c:0
+},
+
+{
+ q:"באיזו יבשת נמצאת ארגנטינה?",
+ a:["דרום אמריקה","אירופה","אסיה","אפריקה"],
+ c:0
+},
+
+{
+ q:"באיזה צבעים משחקת נבחרת ארגנטינה?",
+ a:["תכלת ולבן","אדום ושחור","ירוק ולבן","צהוב וכחול"],
+ c:0
+},
+
+{
+ q:"באיזה טורניר זכתה ארגנטינה ב-2022?",
+ a:["המונדיאל","יורו","קופה דל ריי","ליגת האלופות"],
+ c:0
+},
+
+{
+ q:"מהי עמדתו העיקרית של מסי?",
+ a:["התקפה","שוער","בלם","מגן"],
+ c:0
+},
+
+{
+ q:"איזה מספר מזוהה מאוד עם מסי?",
+ a:["10","7","9","11"],
+ c:0
+},
+
+{
+ q:"איזה מועדון מזוהה מאוד עם הקריירה של מסי?",
+ a:["ברצלונה","מילאן","ארסנל","צ'לסי"],
+ c:0
+},
+
+{
+ q:"איזה תואר אישי מסי זכה בו פעמים רבות?",
+ a:["כדור הזהב","כפפת הזהב","נעל הזהב בלבד","שחקן ההגנה"],
+ c:0
+},
+
+{
+ q:"מהו שמו הפרטי המלא של מסי?",
+ a:["ליונל","לואיס","ליאו בלבד","לאונרדו"],
+ c:0
+},
+
+{
+ q:"באיזו מדינה משחקת קבוצת אינטר מיאמי?",
+ a:["ארצות הברית","ספרד","ארגנטינה","צרפת"],
+ c:0
+},
+
+{
+ q:"איזה צבע מזוהה עם ברצלונה?",
+ a:["כחול ואדום","ירוק ולבן","צהוב ושחור","לבן בלבד"],
+ c:0
+},
+
+{
+ q:"מה מסי עושה בעיקר על המגרש?",
+ a:["מבקיע ומבשל שערים","רק שוער","רק הגנה","רק מוציא חוץ"],
+ c:0
+},
+
+{
+ q:"איזה גביע זכה מסי עם ארגנטינה ב-2022?",
+ a:["גביע העולם","גביע המלך","ליגת האלופות","הליגה האירופית"],
+ c:0
+},
+
+{
+ q:"איזה סוג שחקן מסי ידוע שהוא?",
+ a:["דריבליסט","שוער","בלם","שופט"],
+ c:0
+}
+
+];
+
+
+const trueFalse = [
+
+{
+ q:"מסי נולד בארגנטינה.",
+ c:true
+},
+
+{
+ q:"מסי משחק בנבחרת ברזיל.",
+ c:false
+},
+
+{
+ q:"הרגל החזקה של מסי היא שמאל.",
+ c:true
+},
+
+{
+ q:"מסי זכה במונדיאל עם ארגנטינה ב-2022.",
+ c:true
+},
+
+{
+ q:"מסי מזוהה מאוד עם המספר 10.",
+ c:true
+},
+
+{
+ q:"מסי נולד בספרד.",
+ c:false
+},
+
+{
+ q:"מסי שיחק במשך שנים רבות בברצלונה.",
+ c:true
+},
+
+{
+ q:"ארגנטינה היא מדינה בדרום אמריקה.",
+ c:true
+},
+
+{
+ q:"מסי הוא שוער.",
+ c:false
+},
+
+{
+ q:"הכינוי של מסי הוא 'הפרעוש'.",
+ c:true
+},
+
+{
+ q:"מסי זכה בתארים אישיים רבים.",
+ c:true
+},
+
+{
+ q:"מסי נולד ברוסאריו.",
+ c:true
+},
+
+{
+ q:"מסי משחק בנבחרת ארגנטינה.",
+ c:true
+},
+
+{
+ q:"מונדיאל 2022 התקיים בקטאר.",
+ c:true
+},
+
+{
+ q:"מסי מזוהה עם ברצלונה.",
+ c:true
+}
+
+];
+
+
+let currentGame = "";
+let currentQuestions = [];
+let currentIndex = 0;
+let score = 0;
+let streak = 0;
+let timerInterval = null;
+let timeLeft = 15;
+
+
+let stats = JSON.parse(
+  localStorage.getItem("messiStats")
+) || {
+  totalScore:0,
+  gamesPlayed:0,
+  bestScore:0,
+  correctAnswers:0
+};
+
+
+function saveStats(){
+
+  localStorage.setItem(
+    "messiStats",
+    JSON.stringify(stats)
+  );
+
+  updateStats();
+
+}
+
+
+function updateStats(){
+
+  document.getElementById("totalScore").textContent =
+    stats.totalScore;
+
+  document.getElementById("gamesPlayed").textContent =
+    stats.gamesPlayed;
+
+  document.getElementById("bestScore").textContent =
+    stats.bestScore;
+
+  document.getElementById("correctAnswers").textContent =
+    stats.correctAnswers;
+
+  document.getElementById("homeBest").textContent =
+    stats.bestScore + " נקודות";
+
+}
+
+
+function showPage(id){
+
+  document.querySelectorAll(".page").forEach(
+    page => page.classList.remove("active")
+  );
+
+  document.getElementById(id).classList.add("active");
+
+  updateStats();
+
+}
+
+
+function shuffle(array){
+
+  let arr = [...array];
+
+  for(let i = arr.length - 1; i > 0; i--){
+
+    let j = Math.floor(Math.random() * (i + 1));
+
+    [arr[i], arr[j]] = [arr[j], arr[i]];
+
+  }
+
+  return arr;
+
+}
+
+
+function startGame(type){
+
+  clearInterval(timerInterval);
+
+  currentGame = type;
+  currentIndex = 0;
+  score = 0;
+  streak = 0;
+
+  if(type === "truefalse"){
+
+    currentQuestions = shuffle(trueFalse).slice(0,10);
+
+  } else {
+
+    currentQuestions = shuffle(questions).slice(0,10);
+
+  }
+
+  document.getElementById("gameMenu")
+    .classList.add("hidden");
+
+  document.getElementById("resultBox")
+    .classList.add("hidden");
+
+  document.getElementById("gameBox")
+    .classList.remove("hidden");
+
+  if(type === "speed"){
+
+    document.getElementById("timerBox")
+      .classList.remove("hidden");
+
+  } else {
+
+    document.getElementById("timerBox")
+      .classList.add("hidden");
+
+  }
+
+  showQuestion();
+
+}
+
+
+function showQuestion(){
+
+  clearInterval(timerInterval);
+
+  let item = currentQuestions[currentIndex];
+
+  document.getElementById("feedback").textContent = "";
+
+  document.getElementById("nextButton")
+    .classList.add("hidden");
+
+  let percent =
+    (currentIndex / currentQuestions.length) * 100;
+
+  document.getElementById("progressBar")
+    .style.width = percent + "%";
+
+  document.getElementById("gameScore")
+    .textContent = score;
+
+
+  if(currentGame === "truefalse"){
+
+    document.getElementById("question").textContent =
+      item.q;
+
+    let answers = document.getElementById("answers");
+
+    answers.innerHTML = "";
+
+    createAnswerButton("נכון", true);
+    createAnswerButton("לא נכון", false);
+
+  } else {
+
+    document.getElementById("question").textContent =
+      item.q;
+
+    let answers =
+      document.getElementById("answers");
+
+    answers.innerHTML = "";
+
+    let options = item.a.map(
+      (text,index) => ({
+        text:text,
+        correct:index === item.c
+      })
+    );
+
+    options = shuffle(options);
+
+    options.forEach(option => {
+
+      let btn =
+        document.createElement("button");
+
+      btn.className = "answer";
+      btn.textContent = option.text;
+
+      btn.onclick = () => {
+        answerQuestion(option.correct, btn);
+      };
+
+      answers.appendChild(btn);
+
+    });
+
+  }
+
+
+  if(currentGame === "speed"){
+
+    startTimer();
+
+  }
+
+}
+
+
+function createAnswerButton(text,value){
+
+  let btn =
+    document.createElement("button");
+
+  btn.className = "answer";
+  btn.textContent = text;
+
+  btn.onclick = () => {
+    answerQuestion(
+      value === currentQuestions[currentIndex].c,
+      btn
+    );
+  };
+
+  document.getElementById("answers")
+    .appendChild(btn);
+
+}
+
+
+function answerQuestion(correct,button){
+
+  let buttons =
+    document.querySelectorAll(".answer");
+
+  buttons.forEach(
+    b => b.disabled = true
+  );
+
+  clearInterval(timerInterval);
+
+  if(correct){
+
+    button.classList.add("correct");
+
+    score += 10;
+
+    streak++;
+
+    stats.correctAnswers++;
+
+    if(currentGame === "streak"){
+
+      score += streak * 2;
+
+    }
+
+    document.getElementById("feedback")
+      .textContent =
+      "🎉 נכון! כל הכבוד!";
+
+    playSound();
+
+  } else {
+
+    button.classList.add("wrong");
+
+    streak = 0;
+
+    document.getElementById("feedback")
+      .textContent =
+      "❌ לא נורא! ממשיכים לשאלה הבאה.";
+
+  }
+
+
+  document.getElementById("gameScore")
+    .textContent = score;
+
+
+  if(currentIndex <
+    currentQuestions.length - 1){
+
+    document.getElementById("nextButton")
+      .classList.remove("hidden");
+
+  } else {
+
+    setTimeout(endGame,700);
+
+  }
+
+}
+
+
+function nextQuestion(){
+
+  currentIndex++;
+
+  showQuestion();
+
+}
+
+
+function startTimer(){
+
+  timeLeft = 15;
+
+  document.getElementById("timer")
+    .textContent = timeLeft;
+
+  timerInterval =
+    setInterval(() => {
+
+      timeLeft--;
+
+      document.getElementById("timer")
+        .textContent = timeLeft;
+
+      if(timeLeft <= 0){
+
+        clearInterval(timerInterval);
+
+        let buttons =
+          document.querySelectorAll(".answer");
+
+        buttons.forEach(
+          b => b.disabled = true
+        );
+
+        document.getElementById("feedback")
+          .textContent =
+          "⏰ הזמן נגמר!";
+
+        if(currentIndex <
+          currentQuestions.length - 1){
+
+          document.getElementById("nextButton")
+            .classList.remove("hidden");
+
+        } else {
+
+          setTimeout(endGame,700);
+
+        }
+
+      }
+
+    },1000);
+
+}
+
+
+function endGame(){
+
+  clearInterval(timerInterval);
+
+  stats.gamesPlayed++;
+
+  stats.totalScore += score;
+
+  if(score > stats.bestScore){
+
+    stats.bestScore = score;
+
+  }
+
+  saveStats();
+
+  document.getElementById("gameBox")
+    .classList.add("hidden");
+
+  document.getElementById("resultBox")
+    .classList.remove("hidden");
+
+  document.getElementById("finalScore")
+    .textContent = score;
+
+  let message = "";
+
+  if(score >= 90){
+
+    message =
+      "🔥 וואו! את ממש מומחית למסי!";
+
+  } else if(score >= 60){
+
+    message =
+      "⭐ תוצאה מעולה!";
+
+  } else if(score >= 30){
+
+    message =
+      "💙 יפה! יש לך ידע טוב על מסי.";
+
+  } else {
+
+    message =
+      "⚽ ממשיכים להתאמן! בפעם הבאה יהיה אפילו יותר טוב.";
+
+  }
+
+  document.getElementById("resultText")
+    .textContent = message;
+
+  updateAchievements();
+
+}
+
+
+function quitGame(){
+
+  clearInterval(timerInterval);
+
+  document.getElementById("gameBox")
+    .classList.add("hidden");
+
+  document.getElementById("resultBox")
+    .classList.add("hidden");
+
+  document.getElementById("gameMenu")
+    .classList.remove("hidden");
+
+}
+
+
+function restartGame(){
+
+  document.getElementById("resultBox")
+    .classList.add("hidden");
+
+  document.getElementById("gameMenu")
+    .classList.remove("hidden");
+
+}
+
+
+function createRoom(){
+
+  let chars =
+    "ABCDEFGHJKLMNPQRSTUVWXYZ23456789";
+
+  let code = "";
+
+  for(let i=0;i<6;i++){
+
+    code +=
+      chars[Math.floor(Math.random()*chars.length)];
+
+  }
+
+  document.getElementById("roomMessage")
+    .textContent =
+    "🎉 קוד החדר שלך: " + code;
+
+  localStorage.setItem(
+    "messiRoom",
+    code
+  );
+
+}
+
+
+function joinRoom(){
+
+  let code =
+    document.getElementById("roomInput")
+      .value.trim()
+      .toUpperCase();
+
+  if(code.length < 4){
+
+    document.getElementById("roomMessage")
+      .textContent =
+      "❌ הכניסי קוד חדר תקין.";
+
+    return;
+
+  }
+
+  document.getElementById("roomMessage")
+    .textContent =
+    "🎮 הצטרפת לחדר " + code + "!";
+
+  setTimeout(() => {
+
+    startGame("quiz");
+
+  },500);
+
+}
+
+
+function updateAchievements(){
+
+  let box =
+    document.getElementById("achievements");
+
+  let html =
+    '<div class="badge">🎮 שחקנית מתחילה</div>';
+
+  if(stats.gamesPlayed >= 1){
+
+    html +=
+      '<div class="badge">⭐ המשחק הראשון הושלם</div>';
+
+  }
+
+  if(stats.correctAnswers >= 10){
+
+    html +=
+      '<div class="badge">🧠 10 תשובות נכונות</div>';
+
+  }
+
+  if(stats.bestScore >= 80){
+
+    html +=
+      '<div class="badge">🏆 80+ נקודות</div>';
+
+  }
+
+  if(stats.gamesPlayed >= 5){
+
+    html +=
+      '<div class="badge">🔥 5 משחקים</div>';
+
+  }
+
+  box.innerHTML = html;
+
+}
+
+
+function resetStats(){
+
+  let sure =
+    confirm("לאפס את כל ההישגים והנקודות?");
+
+  if(!sure) return;
+
+  stats = {
+    totalScore:0,
+    gamesPlayed:0,
+    bestScore:0,
+    correctAnswers:0
+  };
+
+  saveStats();
+  updateAchievements();
+
+}
+
+
+function playSound(){
+
+  try{
+
+    const AudioContext =
+      window.AudioContext ||
+      window.webkitAudioContext;
+
+    const audio =
+      new AudioContext();
+
+    const oscillator =
+      audio.createOscillator();
+
+    const gain =
+      audio.createGain();
+
+    oscillator.frequency.value = 600;
+    oscillator.type = "sine";
+
+    gain.gain.value = 0.08;
+
+    oscillator.connect(gain);
+    gain.connect(audio.destination);
+
+    oscillator.start();
+
+    setTimeout(() => {
+
+      oscillator.frequency.value = 850;
+
+    },100);
+
+    setTimeout(() => {
+
+      oscillator.stop();
+      audio.close();
+
+    },220);
+
+  }catch(e){
+
+    console.log(e);
+
+  }
+
+}
+
+
+updateStats();
+updateAchievements();
+
+</script>
+
+</body>
+      </html>
