@@ -1,0 +1,1305 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Messi Battle ⚽</title>
+
+<style>
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  -webkit-tap-highlight-color: transparent;
+}
+
+body {
+  font-family: Arial, sans-serif;
+  min-height: 100vh;
+  color: white;
+  background:
+    radial-gradient(circle at 20% 0%, #2857a8 0%, transparent 35%),
+    radial-gradient(circle at 100% 100%, #173d83 0%, transparent 35%),
+    linear-gradient(145deg, #06132e, #071d45 55%, #031027);
+}
+
+button,
+input {
+  font-family: inherit;
+}
+
+button {
+  border: none;
+  cursor: pointer;
+}
+
+#app {
+  width: 100%;
+  max-width: 1100px;
+  margin: auto;
+  padding: 15px;
+}
+
+header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 0 20px;
+}
+
+.logo {
+  font-size: 25px;
+  font-weight: 900;
+}
+
+.logo span {
+  color: #61d5ff;
+}
+
+.scoreBox {
+  background: rgba(255,255,255,.1);
+  border: 1px solid rgba(255,255,255,.15);
+  padding: 9px 14px;
+  border-radius: 30px;
+  font-weight: bold;
+}
+
+.screen {
+  display: none;
+}
+
+.screen.active {
+  display: block;
+}
+
+.hero {
+  text-align: center;
+  padding: 35px 10px;
+}
+
+.ball {
+  font-size: 75px;
+  margin-bottom: 10px;
+  animation: ball 2s infinite ease-in-out;
+}
+
+@keyframes ball {
+  0%,100% { transform: translateY(0) rotate(0); }
+  50% { transform: translateY(-12px) rotate(8deg); }
+}
+
+.hero h1 {
+  font-size: 45px;
+  margin-bottom: 10px;
+}
+
+.hero h1 span {
+  color: #62d8ff;
+}
+
+.hero p {
+  color: #c7d9f7;
+  font-size: 18px;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 15px;
+}
+
+.card {
+  background: rgba(255,255,255,.09);
+  border: 1px solid rgba(255,255,255,.13);
+  border-radius: 22px;
+  padding: 22px;
+  box-shadow: 0 15px 40px rgba(0,0,0,.18);
+}
+
+.cardButton {
+  color: white;
+  text-align: right;
+  width: 100%;
+  transition: .2s;
+}
+
+.cardButton:hover {
+  transform: translateY(-4px);
+  background: rgba(255,255,255,.15);
+}
+
+.icon {
+  font-size: 45px;
+  margin-bottom: 10px;
+}
+
+.card h2,
+.card h3 {
+  margin-bottom: 8px;
+}
+
+.card p {
+  color: #c7d9f7;
+  line-height: 1.5;
+}
+
+.primary {
+  background: linear-gradient(135deg,#20b9f5,#2463e8);
+  color: white;
+}
+
+.green {
+  background: linear-gradient(135deg,#22c55e,#15803d);
+  color: white;
+}
+
+.pink {
+  background: linear-gradient(135deg,#f472b6,#db2777);
+  color: white;
+}
+
+.gold {
+  background: linear-gradient(135deg,#facc15,#eab308);
+  color: #172033;
+}
+
+.button {
+  width: 100%;
+  padding: 16px;
+  margin-top: 10px;
+  border-radius: 16px;
+  font-weight: 900;
+  font-size: 16px;
+  transition: .2s;
+}
+
+.button:active {
+  transform: scale(.98);
+}
+
+.back {
+  background: none;
+  color: #bcd5ff;
+  font-weight: bold;
+  padding: 10px 0 20px;
+  font-size: 15px;
+}
+
+.title {
+  text-align: center;
+  margin: 10px 0 25px;
+}
+
+.modeGrid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 15px;
+}
+
+.modeButton {
+  padding: 30px 15px;
+  border-radius: 22px;
+  color: white;
+  font-size: 19px;
+  font-weight: 900;
+}
+
+.modeButton div {
+  font-size: 48px;
+  margin-bottom: 10px;
+}
+
+.input {
+  width: 100%;
+  padding: 16px;
+  margin: 7px 0;
+  border: none;
+  border-radius: 15px;
+  text-align: center;
+  font-size: 17px;
+  outline: none;
+}
+
+.roomCode {
+  font-size: 36px;
+  font-weight: 900;
+  color: #6ee7ff;
+  letter-spacing: 7px;
+  text-align: center;
+  margin: 20px 0;
+}
+
+.players {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  justify-content: center;
+  margin: 20px 0;
+}
+
+.player {
+  background: rgba(255,255,255,.1);
+  padding: 10px 15px;
+  border-radius: 30px;
+}
+
+.status {
+  text-align: center;
+  padding: 14px;
+  border-radius: 15px;
+  background: rgba(0,0,0,.2);
+  margin: 15px 0;
+  line-height: 1.5;
+}
+
+.quizTop {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+  margin-bottom: 12px;
+}
+
+.badge {
+  background: rgba(255,255,255,.1);
+  padding: 9px 13px;
+  border-radius: 20px;
+  font-weight: bold;
+}
+
+.progress {
+  height: 9px;
+  border-radius: 20px;
+  background: rgba(255,255,255,.1);
+  overflow: hidden;
+  margin-bottom: 25px;
+}
+
+.progressBar {
+  height: 100%;
+  width: 0%;
+  background: linear-gradient(90deg,#38bdf8,#facc15);
+  transition: .3s;
+}
+
+.questionCard {
+  text-align: center;
+}
+
+.question {
+  font-size: 25px;
+  font-weight: 900;
+  line-height: 1.45;
+  margin: 15px 0 25px;
+}
+
+.answers {
+  display: grid;
+  gap: 12px;
+}
+
+.answer {
+  width: 100%;
+  color: white;
+  background: rgba(255,255,255,.1);
+  border: 2px solid transparent;
+  border-radius: 16px;
+  padding: 17px;
+  text-align: right;
+  font-size: 16px;
+  transition: .2s;
+}
+
+.answer:hover {
+  background: rgba(255,255,255,.17);
+}
+
+.answer.correct {
+  background: #15803d;
+  border-color: #4ade80;
+}
+
+.answer.wrong {
+  background: #991b1b;
+  border-color: #fb7185;
+}
+
+.timer {
+  text-align: center;
+  font-size: 32px;
+  font-weight: 900;
+  color: #facc15;
+  min-height: 40px;
+  margin-bottom: 10px;
+}
+
+.result {
+  text-align: center;
+  padding: 40px 10px;
+}
+
+.resultEmoji {
+  font-size: 70px;
+}
+
+.finalScore {
+  font-size: 75px;
+  font-weight: 900;
+  color: #67e8f9;
+  margin: 10px;
+}
+
+.infoItem {
+  cursor: pointer;
+}
+
+.infoContent {
+  display: none;
+  margin-top: 15px;
+  color: #d6e5ff;
+  line-height: 1.7;
+}
+
+.infoItem.open .infoContent {
+  display: block;
+}
+
+.stat {
+  text-align: center;
+}
+
+.stat strong {
+  display: block;
+  font-size: 36px;
+  color: #6ee7ff;
+  margin-bottom: 5px;
+}
+
+.notice {
+  background: rgba(250,204,21,.1);
+  border: 1px solid rgba(250,204,21,.25);
+  border-radius: 15px;
+  padding: 14px;
+  line-height: 1.6;
+  color: #fff4bd;
+  margin-top: 15px;
+}
+
+.musicButton {
+  position: fixed;
+  bottom: 18px;
+  left: 18px;
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  background: rgba(255,255,255,.14);
+  color: white;
+  font-size: 22px;
+  z-index: 100;
+}
+
+@media(max-width:600px) {
+  .hero h1 {
+    font-size: 34px;
+  }
+
+  .modeGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .question {
+    font-size: 21px;
+  }
+
+  .roomCode {
+    font-size: 29px;
+    letter-spacing: 5px;
+  }
+}
+</style>
+</head>
+
+<body>
+
+<div id="app">
+
+<header>
+  <div class="logo">MESSI <span>BATTLE</span> ⚽</div>
+  <div class="scoreBox">🏆 <span id="bestScore">0</span></div>
+</header>
+
+
+<!-- HOME -->
+<section id="home" class="screen active">
+
+  <div class="hero">
+    <div class="ball">⚽</div>
+    <h1>MESSI <span>BATTLE</span></h1>
+    <p>החידון הגדול למעריצי מסי 💙</p>
+  </div>
+
+  <div class="grid">
+
+    <button class="card cardButton" onclick="showGames()">
+      <div class="icon">🎮</div>
+      <h3>המשחקים</h3>
+      <p>5 משחקים שונים על ליאו מסי.</p>
+    </button>
+
+    <button class="card cardButton" onclick="showFriends()">
+      <div class="icon">👥</div>
+      <h3>משחק עם חברים</h3>
+      <p>צרי חדר וקבלי קוד אוטומטי.</p>
+    </button>
+
+    <button class="card cardButton" onclick="showInfo()">
+      <div class="icon">📚</div>
+      <h3>מאגר מסי</h3>
+      <p>עובדות, קריירה, ברצלונה, ארגנטינה ועוד.</p>
+    </button>
+
+    <button class="card cardButton" onclick="showAchievements()">
+      <div class="icon">🏅</div>
+      <h3>הישגים</h3>
+      <p>בדקי את השיאים שלך.</p>
+    </button>
+
+  </div>
+
+</section>
+
+
+<!-- GAMES -->
+<section id="games" class="screen">
+
+<button class="back" onclick="showScreen('home')">← חזרה</button>
+
+<h2 class="title">🎮 בחרי משחק</h2>
+
+<div class="grid">
+
+  <button class="card cardButton" onclick="selectGame('quiz')">
+    <div class="icon">🧠</div>
+    <h3>חידון מסי</h3>
+    <p>10 שאלות אמריקאיות.</p>
+  </button>
+
+  <button class="card cardButton" onclick="selectGame('truefalse')">
+    <div class="icon">✅</div>
+    <h3>נכון או לא נכון</h3>
+    <p>מהר! נכון או לא נכון?</p>
+  </button>
+
+  <button class="card cardButton" onclick="selectGame('speed')">
+    <div class="icon">⚡</div>
+    <h3>נגד השעון</h3>
+    <p>45 שניות לענות על כמה שיותר.</p>
+  </button>
+
+  <button class="card cardButton" onclick="selectGame('streak')">
+    <div class="icon">🔥</div>
+    <h3>רצף</h3>
+    <p>טעות אחת ואת מתחילה מחדש.</p>
+  </button>
+
+  <button class="card cardButton" onclick="selectGame('test')">
+    <div class="icon">🏆</div>
+    <h3>המבחן הגדול</h3>
+    <p>20 שאלות וציון מתוך 100.</p>
+  </button>
+
+</div>
+
+</section>
+
+
+<!-- CHOOSE MODE -->
+<section id="chooseMode" class="screen">
+
+<button class="back" onclick="showScreen('games')">← חזרה</button>
+
+<h2 class="title" id="selectedGameTitle">בחרי מצב</h2>
+
+<div class="modeGrid">
+
+<button class="modeButton primary" onclick="startSolo()">
+  <div>👤</div>
+  לשחק לבד
+</button>
+
+<button class="modeButton green" onclick="openOnlineForGame()">
+  <div>👥</div>
+  לשחק עם חברים
+</button>
+
+</div>
+
+<div class="notice">
+💡 כל משחק באתר זמין גם לבד וגם עם חברים.
+</div>
+
+</section>
+
+
+<!-- FRIENDS -->
+<section id="friends" class="screen">
+
+<button class="back" onclick="showScreen('home')">← חזרה</button>
+
+<h2 class="title">👥 משחק עם חברים</h2>
+
+<div class="card">
+
+<h3>👑 יצירת חדר</h3>
+
+<p>המערכת תיצור לך קוד חדר אוטומטי.</p>
+
+<button class="button primary" onclick="createRoom()">
+🔐 צרי חדר חדש
+</button>
+
+</div>
+
+<div class="card" style="margin-top:15px">
+
+<h3>🚪 הצטרפות לחדר</h3>
+
+<input
+  id="playerName"
+  class="input"
+  placeholder="השם שלך"
+>
+
+<input
+  id="joinCode"
+  class="input"
+  placeholder="קוד החדר"
+  maxlength="8"
+>
+
+<button class="button green" onclick="joinRoom()">
+🚀 הצטרפי לחדר
+</button>
+
+</div>
+
+</section>
+
+
+<!-- LOBBY -->
+<section id="lobby" class="screen">
+
+<button class="back" onclick="leaveRoom()">← יציאה</button>
+
+<div class="card" style="text-align:center">
+
+<h2>🏟️ חדר משחק</h2>
+
+<div class="roomCode" id="roomCode">
+--------
+</div>
+
+<p>שלחי את הקוד לחברה 💗</p>
+
+<div class="players" id="players"></div>
+
+<div class="status" id="lobbyStatus">
+⏳ מחכים...
+</div>
+
+<button
+  id="startButton"
+  class="button primary"
+  onclick="startOnlineGame()"
+  style="display:none"
+>
+🚀 התחל משחק
+</button>
+
+</div>
+
+</section>
+
+
+<!-- QUIZ -->
+<section id="quiz" class="screen">
+
+<div class="quizTop">
+
+<div class="badge">
+❓ <span id="questionNumber">1</span>/<span id="questionTotal">10</span>
+</div>
+
+<div class="badge">
+🏆 <span id="gameScore">0</span>
+</div>
+
+</div>
+
+<div class="progress">
+<div id="progressBar" class="progressBar"></div>
+</div>
+
+<div id="timer" class="timer"></div>
+
+<div class="card questionCard">
+
+<div id="question" class="question"></div>
+
+<div id="answers" class="answers"></div>
+
+</div>
+
+</section>
+
+
+<!-- RESULT -->
+<section id="result" class="screen">
+
+<div class="result">
+
+<div class="resultEmoji">🏆</div>
+
+<h2>המשחק הסתיים!</h2>
+
+<div id="finalScore" class="finalScore">0</div>
+
+<p id="resultText"></p>
+
+<button class="button primary" onclick="playAgain()">
+🔄 לשחק שוב
+</button>
+
+<button class="button" style="background:rgba(255,255,255,.1);color:white" onclick="showScreen('home')">
+🏠 לתפריט הראשי
+</button>
+
+</div>
+
+</section>
+
+
+<!-- INFO -->
+<section id="info" class="screen">
+
+<button class="back" onclick="showScreen('home')">← חזרה</button>
+
+<h2 class="title">📚 מאגר מסי</h2>
+
+<div id="infoList" class="grid"></div>
+
+</section>
+
+
+<!-- ACHIEVEMENTS -->
+<section id="achievements" class="screen">
+
+<button class="back" onclick="showScreen('home')">← חזרה</button>
+
+<h2 class="title">🏅 ההישגים שלי</h2>
+
+<div class="grid">
+
+<div class="card stat">
+<strong id="gamesPlayed">0</strong>
+משחקים
+</div>
+
+<div class="card stat">
+<strong id="correctCount">0</strong>
+תשובות נכונות
+</div>
+
+<div class="card stat">
+<strong id="bestCount">0</strong>
+שיא
+</div>
+
+<div class="card stat">
+<strong id="streakCount">0</strong>
+🔥 רצף
+</div>
+
+</div>
+
+<div class="grid" style="margin-top:15px">
+
+<div class="card">
+<h3>🥉 מתחילה</h3>
+<p>שחקי משחק ראשון.</p>
+<strong id="achievement1">🔒</strong>
+</div>
+
+<div class="card">
+<h3>🥈 אוהדת מסי</h3>
+<p>25 תשובות נכונות.</p>
+<strong id="achievement2">🔒</strong>
+</div>
+
+<div class="card">
+<h3>🥇 מומחית מסי</h3>
+<p>100 תשובות נכונות.</p>
+<strong id="achievement3">🔒</strong>
+</div>
+
+<div class="card">
+<h3>🔥 בלתי עצירה</h3>
+<p>רצף של 10.</p>
+<strong id="achievement4">🔒</strong>
+</div>
+
+</div>
+
+</section>
+
+</div>
+
+
+<button class="musicButton" onclick="toggleSound()" id="soundButton">
+🔇
+</button>
+
+
+<script>
+
+/* ======================================
+   DATA
+====================================== */
+
+const questions = [
+
+{
+q:"באיזו עיר נולד ליאו מסי?",
+a:["רוסאריו","מדריד","פריז","מיאמי"],
+c:0
+},
+
+{
+q:"באיזו מדינה נולד מסי?",
+a:["ארגנטינה","ספרד","צרפת","איטליה"],
+c:0
+},
+
+{
+q:"איזה מספר מזוהה במיוחד עם מסי?",
+a:["10","7","9","11"],
+c:0
+},
+
+{
+q:"איזו נבחרת מייצג מסי?",
+a:["ארגנטינה","ספרד","ברזיל","איטליה"],
+c:0
+},
+
+{
+q:"באיזה מועדון שיחק מסי שנים רבות?",
+a:["ברצלונה","ריאל מדריד","יובנטוס","ליברפול"],
+c:0
+},
+
+{
+q:"באיזו שנה ערך מסי הופעת בכורה בקבוצה הבוגרת של ברצלונה?",
+a:["2004","2006","2008","2002"],
+c:0
+},
+
+{
+q:"באיזה גיל בערך עבר מסי לברצלונה?",
+a:["13","18","10","21"],
+c:0
+},
+
+{
+q:"באיזו שנה זכתה ארגנטינה במונדיאל עם מסי?",
+a:["2022","2018","2014","2010"],
+c:0
+},
+
+{
+q:"נגד מי שיחקה ארגנטינה בגמר מונדיאל 2022?",
+a:["צרפת","ברזיל","גרמניה","פורטוגל"],
+c:0
+},
+
+{
+q:"באיזו שנה זכתה ארגנטינה בקופה אמריקה?",
+a:["2021","2019","2015","2018"],
+c:0
+},
+
+{
+q:"איזה מועדון נמצא בפלורידה ומזוהה עם מסי?",
+a:["אינטר מיאמי","אורלנדו סיטי","LA Galaxy","אטלנטה"],
+c:0
+},
+
+{
+q:"איזה צבע מזוהה במיוחד עם אינטר מיאמי?",
+a:["ורוד","ירוק","כתום","צהוב"],
+c:0
+},
+
+{
+q:"מהו הכינוי La Pulga?",
+a:["הפרעוש","המלך","הקוסם","האריה"],
+c:0
+},
+
+{
+q:"באיזו רגל מסי מזוהה במיוחד?",
+a:["שמאל","ימין","שתיהן באותה מידה","אף אחת"],
+c:0
+},
+
+{
+q:"מהו קאמפ נואו?",
+a:["אצטדיון המזוהה עם ברצלונה","אצטדיון בארגנטינה","גביע","שחקן"],
+c:0
+},
+
+{
+q:"מי היריבה הגדולה של ברצלונה באל קלאסיקו?",
+a:["ריאל מדריד","אתלטיקו מדריד","ולנסיה","סביליה"],
+c:0
+},
+
+{
+q:"באיזו מדינה נמצאת ברצלונה?",
+a:["ספרד","איטליה","צרפת","פורטוגל"],
+c:0
+},
+
+{
+q:"באיזו יבשת נמצאת ארגנטינה?",
+a:["דרום אמריקה","אירופה","אסיה","אפריקה"],
+c:0
+},
+
+{
+q:"מהו אסיסט?",
+a:["בישול לשער","כרטיס צהוב","פנדל","בעיטת קרן"],
+c:0
+},
+
+{
+q:"מהו דריבל?",
+a:["התקדמות עם הכדור תוך שליטה בו","בעיטה חופשית","חילוף","שריקה"],
+c:0
+},
+
+{
+q:"כמה מחציות יש במשחק כדורגל רגיל?",
+a:["2","3","4","1"],
+c:0
+},
+
+{
+q:"כמה דקות יש במשחק כדורגל רגיל ללא תוספת זמן?",
+a:["90","60","100","45"],
+c:0
+},
+
+{
+q:"כמה דקות יש במחצית רגילה?",
+a:["45","30","60","50"],
+c:0
+},
+
+{
+q:"מהו כרטיס אדום?",
+a:["הרחקה מהמשחק","אזהרה בלבד","שער","חילוף"],
+c:0
+},
+
+{
+q:"מהו כרטיס צהוב?",
+a:["אזהרה","הרחקה אוטומטית","שער","חילוף"],
+c:0
+},
+
+{
+q:"מהו VAR?",
+a:["מערכת עזר לשופט באמצעות וידאו","סוג כדור","אצטדיון","תפקיד שחקן"],
+c:0
+},
+
+{
+q:"מהי בעיטת פנדל?",
+a:["בעיטת עונשין מנקודת הפנדל","בעיטת קרן","בעיטת פתיחה","בעיטת חוץ"],
+c:0
+},
+
+{
+q:"מהו מונדיאל?",
+a:["טורניר נבחרות בינלאומי","טורניר מועדונים בלבד","משחק ידידות","טורניר נוער"],
+c:0
+},
+
+{
+q:"מהי ליגת האלופות?",
+a:["מפעל מועדונים אירופי","טורניר נבחרות","משחק ידידות","ליגת בתי ספר"],
+c:0
+},
+
+{
+q:"מהי נבחרת לאומית?",
+a:["קבוצה שמייצגת מדינה","מועדון פרטי","קבוצת נוער","קבוצת אוהדים"],
+c:0
+},
+
+{
+q:"מי זכתה במונדיאל 2022?",
+a:["ארגנטינה","צרפת","ברזיל","גרמניה"],
+c:0
+},
+
+{
+q:"מי ניצחה את ארגנטינה בגמר מונדיאל 2014?",
+a:["גרמניה","צרפת","ברזיל","ספרד"],
+c:0
+},
+
+{
+q:"איזו נבחרת הייתה היריבה של ארגנטינה בגמר מונדיאל 2014?",
+a:["גרמניה","צרפת","הולנד","ברזיל"],
+c:0
+},
+
+{
+q:"איזה תואר זכתה ארגנטינה ב-2021?",
+a:["קופה אמריקה","יורו","ליגת האלופות","גביע המלך"],
+c:0
+},
+
+{
+q:"מה פירוש GOAT בעולם הספורט?",
+a:["הטוב ביותר בכל הזמנים","שחקן צעיר","מאמן","שוער"],
+c:0
+},
+
+{
+q:"מהו קפטן?",
+a:["שחקן שמוביל את הקבוצה","השופט","המאמן","הקהל"],
+c:0
+},
+
+{
+q:"מהו בישול?",
+a:["מסירה שהובילה לשער","כרטיס","פנדל","חילוף"],
+c:0
+},
+
+{
+q:"מהו שער עצמי?",
+a:["שער שנכבש לשער של הקבוצה שלך","שער בפנדל","שער מהקרן","שער בהארכה"],
+c:0
+},
+
+{
+q:"מהי בעיטת קרן?",
+a:["בעיטה מהפינה","בעיטה מהמרכז","פנדל","בעיטה חופשית"],
+c:0
+},
+
+{
+q:"מהי הארכה?",
+a:["זמן נוסף לאחר משחק שדורש הכרעה","הפסקה","חימום","אימון"],
+c:0
+},
+
+{
+q:"מהו שופט?",
+a:["האדם שמנהל את המשחק ואוכף את החוקים","שחקן","מאמן","אוהד"],
+c:0
+},
+
+{
+q:"מהו נבדל?",
+a:["חוק שמגביל מיקום של שחקן תוקף","סוג בעיטה","כרטיס","חילוף"],
+c:0
+},
+
+{
+q:"האם מסי זכה במונדיאל?",
+a:["כן","לא","רק כמאמן","רק בנוער"],
+c:0
+},
+
+{
+q:"האם מסי שיחק בברצלונה?",
+a:["כן","לא","רק באימונים","רק בנוער"],
+c:0
+},
+
+{
+q:"האם מסי שיחק בפריז סן ז'רמן?",
+a:["כן","לא","רק בנבחרת","רק בנוער"],
+c:0
+},
+
+{
+q:"האם מסי שיחק באינטר מיאמי?",
+a:["כן","לא","רק באימון","רק בנבחרת"],
+c:0
+},
+
+{
+q:"האם ארגנטינה נמצאת בדרום אמריקה?",
+a:["כן","לא","באירופה","באסיה"],
+c:0
+},
+
+{
+q:"האם ברצלונה נמצאת בספרד?",
+a:["כן","לא","בצרפת","באיטליה"],
+c:0
+},
+
+{
+q:"האם מסי ידוע בדריבל?",
+a:["כן","לא","רק בשוערות","רק בהגנה"],
+c:0
+},
+
+{
+q:"האם מסי ידוע בבעיטות חופשיות?",
+a:["כן","לא","רק בקרנות","רק בפנדלים"],
+c:0
+},
+
+{
+q:"האם מספר 10 מזוהה עם מסי?",
+a:["כן","לא","מספר 1","מספר 99"],
+c:0
+},
+
+{
+q:"האם מונדיאל הוא טורניר נבחרות?",
+a:["כן","לא","רק מועדונים","רק נוער"],
+c:0
+},
+
+{
+q:"האם ליגת האלופות היא מפעל מועדונים?",
+a:["כן","לא","טורניר נבחרות","משחק ידידות"],
+c:0
+},
+
+{
+q:"האם פנדל נבעט מנקודת הפנדל?",
+a:["כן","לא","מהקרן","מהחצי"],
+c:0
+},
+
+{
+q:"האם כרטיס אדום יכול להרחיק שחקן?",
+a:["כן","לא","הוא נותן שער","הוא נותן חילוף"],
+c:0
+},
+
+{
+q:"האם כרטיס צהוב הוא אזהרה?",
+a:["כן","לא","הוא שער","הוא פנדל"],
+c:0
+},
+
+{
+q:"האם משחק כדורגל יכול להסתיים בתיקו?",
+a:["כן","לא","אף פעם","רק באימונים"],
+c:0
+},
+
+{
+q:"האם אסיסט הוא בישול?",
+a:["כן","לא","כרטיס","פנדל"],
+c:0
+},
+
+{
+q:"האם קפטן הוא השופט?",
+a:["לא","כן","לפעמים","רק במונדיאל"],
+c:0
+},
+
+{
+q:"האם ברצלונה וריאל מדריד יריבות?",
+a:["כן","לא","הן אותה קבוצה","הן נבחרות"],
+c:0
+},
+
+{
+q:"האם מסי היה קפטן ארגנטינה?",
+a:["כן","לא","הוא היה שוער","הוא היה שופט"],
+c:0
+},
+
+{
+q:"מהו אל קלאסיקו?",
+a:["ברצלונה נגד ריאל מדריד","ארגנטינה נגד ברזיל","מיאמי נגד ברצלונה","צרפת נגד ספרד"],
+c:0
+},
+
+{
+q:"מהו MLS?",
+a:["ליגת כדורגל מקצוענית בצפון אמריקה","טורניר נבחרות","ליגה ספרדית","גביע העולם"],
+c:0
+},
+
+{
+q:"באיזו מדינה משחקת אינטר מיאמי?",
+a:["ארצות הברית","ספרד","ארגנטינה","צרפת"],
+c:0
+},
+
+{
+q:"מהו צבע מזוהה עם נבחרת ארגנטינה?",
+a:["תכלת","כתום","ירוק","סגול"],
+c:0
+},
+
+{
+q:"מהו שם עיר הולדתו של מסי?",
+a:["רוסאריו","קורדובה","מדריד","מיאמי"],
+c:0
+},
+
+{
+q:"באיזה חודש נולד מסי?",
+a:["יוני","ינואר","דצמבר","מרץ"],
+c:0
+},
+
+{
+q:"מהו שמו הפרטי של מסי?",
+a:["ליאונל","לואיס","לאוטרו","לוקה"],
+c:0
+},
+
+{
+q:"מהו שם משפחתו?",
+a:["מסי","מרטינס","גונזלס","דיאס"],
+c:0
+},
+
+{
+q:"איזה כינוי נוסף מזוהה עם מסי?",
+a:["La Pulga","El Toro","El Rey","El Muro"],
+c:0
+},
+
+{
+q:"מהו סגנון משחק שמזוהה עם מסי?",
+a:["דריבל ויצירת מצבים","שוערות","הגנה בלבד","בעיטות חוץ בלבד"],
+c:0
+},
+
+{
+q:"באיזו יבשת נמצאת ספרד?",
+a:["אירופה","אסיה","אפריקה","דרום אמריקה"],
+c:0
+},
+
+{
+q:"באיזו יבשת נמצאת ארצות הברית?",
+a:["צפון אמריקה","אירופה","אסיה","אפריקה"],
+c:0
+},
+
+{
+q:"מהו קלין שיט?",
+a:["משחק שבו הקבוצה לא ספגה שער","שלושער","פנדל","כרטיס"],
+c:0
+},
+
+{
+q:"מהי מחצית?",
+a:["אחד משני חלקי המשחק","שער","כרטיס","פנדל"],
+c:0
+},
+
+{
+q:"מהי פתיחת משחק?",
+a:["הבעיטה שמתחילה את המשחק","בעיטת קרן","פנדל","חילוף"],
+c:0
+},
+
+{
+q:"מהי תוצאה 0:0?",
+a:["תיקו ללא שערים","ניצחון","הפסד","פנדלים"],
+c:0
+},
+
+{
+q:"מהו קאמבק?",
+a:["חזרה מפיגור לתוצאה טובה יותר","פתיחת משחק","כרטיס","חילוף"],
+c:0
+},
+
+{
+q:"מהי רחבת העונשין?",
+a:["האזור ליד השער שבו חלים חוקים מיוחדים","מרכז המגרש","היציע","ספסל"],
+c:0
+},
+
+{
+q:"מהי פיפ״א?",
+a:["הגוף הבינלאומי המרכזי של הכדורגל","מועדון","אצטדיון","שחקן"],
+c:0
+},
+
+{
+q:"האם מסי מזוהה עם רגל שמאל?",
+a:["כן","לא","רק עם ימין","רק עם הראש"],
+c:0
+},
+
+{
+q:"האם רוסאריו היא עיר בארגנטינה?",
+a:["כן","לא","בספרד","בצרפת"],
+c:0
+},
+
+{
+q:"האם פריז סן ז'רמן הוא מועדון צרפתי?",
+a:["כן","לא","ספרדי","איטלקי"],
+c:0
+},
+
+{
+q:"האם אינטר מיאמי הוא מועדון אמריקאי?",
+a:["כן","לא","ספרדי","ארגנטינאי"],
+c:0
+},
+
+{
+q:"האם מסי זכה בקופה אמריקה עם ארגנטינה?",
+a:["כן","לא","רק כמאמן","רק בנוער"],
+c:0
+},
+
+{
+q:"האם ארגנטינה זכתה במונדיאל 2022?",
+a:["כן","לא","רק במקום השני","רק בחצי הגמר"],
+c:0
+},
+
+{
+q:"מי הייתה היריבה של ארגנטינה בגמר 2022?",
+a:["צרפת","ספרד","פורטוגל","ברזיל"],
+c:0
+},
+
+{
+q:"באיזו מדינה נערך מונדיאל 2022?",
+a:["קטאר","רוסיה","ברזיל","צרפת"],
+c:0
+},
+
+{
+q:"איזה מספר לבש מסי בתחילת דרכו בברצלונה?",
+a:["30","10","7","9"],
+c:0
+},
+
+{
+q:"מהו תפקיד השו
