@@ -1,0 +1,1077 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Messi Battle ⚽🐐</title>
+
+<script src="https://unpkg.com/peerjs@1.5.4/dist/peerjs.min.js"></script>
+
+<style>
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  font-family: Arial, sans-serif;
+  background:
+    radial-gradient(circle at top, #234d9b, transparent 45%),
+    linear-gradient(145deg, #06132f, #102d61 55%, #071936);
+  color: white;
+}
+
+.container {
+  width: min(700px, 94%);
+  margin: auto;
+  padding: 25px 0 45px;
+}
+
+.card {
+  background: rgba(255,255,255,0.10);
+  border: 1px solid rgba(255,255,255,0.18);
+  border-radius: 30px;
+  padding: 25px;
+  box-shadow: 0 20px 60px rgba(0,0,0,0.30);
+  backdrop-filter: blur(14px);
+}
+
+.screen {
+  display: none;
+}
+
+.screen.active {
+  display: block;
+}
+
+.logo {
+  text-align: center;
+  font-size: 42px;
+  font-weight: 900;
+  margin: 10px 0 5px;
+}
+
+.subtitle {
+  text-align: center;
+  opacity: .85;
+  margin-bottom: 28px;
+}
+
+input {
+  width: 100%;
+  padding: 16px;
+  margin: 7px 0;
+  border: none;
+  border-radius: 16px;
+  font-size: 17px;
+  text-align: center;
+  outline: none;
+}
+
+button {
+  width: 100%;
+  padding: 16px;
+  margin: 7px 0;
+  border: none;
+  border-radius: 16px;
+  font-size: 17px;
+  font-weight: bold;
+  cursor: pointer;
+  background: #ffd83d;
+  color: #111;
+}
+
+button.secondary {
+  background: rgba(255,255,255,.15);
+  color: white;
+}
+
+button:disabled {
+  opacity: .45;
+  cursor: not-allowed;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+
+.title {
+  text-align: center;
+  font-size: 30px;
+}
+
+.room-code {
+  text-align: center;
+  font-size: 38px;
+  font-weight: 900;
+  letter-spacing: 7px;
+  background: rgba(0,0,0,.22);
+  padding: 18px;
+  border-radius: 20px;
+  margin: 20px 0;
+}
+
+.players {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin: 18px 0;
+}
+
+.player {
+  background: rgba(255,255,255,.14);
+  padding: 12px 18px;
+  border-radius: 999px;
+}
+
+.status {
+  text-align: center;
+  min-height: 28px;
+  margin: 12px 0;
+  font-weight: bold;
+}
+
+.question-number {
+  text-align: center;
+  opacity: .8;
+}
+
+.question {
+  font-size: 25px;
+  text-align: center;
+  line-height: 1.4;
+  margin: 20px 0;
+}
+
+.answers {
+  display: grid;
+  gap: 10px;
+}
+
+.answer {
+  background: white;
+  color: #111;
+  text-align: right;
+}
+
+.answer.correct {
+  background: #72e39e;
+}
+
+.answer.wrong {
+  background: #ff8585;
+}
+
+.scores {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.score {
+  background: rgba(0,0,0,.22);
+  padding: 12px 18px;
+  border-radius: 15px;
+}
+
+.big-result {
+  text-align: center;
+  font-size: 35px;
+  font-weight: 900;
+  margin: 25px 0;
+}
+
+.small {
+  text-align: center;
+  opacity: .65;
+  font-size: 13px;
+  line-height: 1.5;
+}
+
+@media (max-width: 550px) {
+  .grid {
+    grid-template-columns: 1fr;
+  }
+
+  .logo {
+    font-size: 34px;
+  }
+
+  .question {
+    font-size: 22px;
+  }
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+<div class="card">
+
+<!-- HOME -->
+<section id="home" class="screen active">
+
+  <div class="logo">⚽ MESSI BATTLE 🐐</div>
+  <div class="subtitle">מי מכיר את מסי הכי טוב?</div>
+
+  <input id="homeName" maxlength="18" placeholder="כתבי את השם שלך">
+
+  <div class="grid">
+    <button onclick="createRoom()">🎮 יצירת חדר</button>
+    <button class="secondary" onclick="showScreen('join')">
+      🔑 הצטרפות לחדר
+    </button>
+  </div>
+
+  <button class="secondary" onclick="startSolo()">
+    🧠 משחק לבד
+  </button>
+
+  <p class="small">
+    במשחק מרחוק חברה יכולה להיכנס לאותו חדר באמצעות קוד החדר.
+  </p>
+
+</section>
+
+
+<!-- JOIN -->
+<section id="join" class="screen">
+
+  <h2 class="title">🔑 הצטרפות לחדר</h2>
+
+  <input id="joinName" maxlength="18" placeholder="השם שלך">
+
+  <input
+    id="roomInput"
+    maxlength="6"
+    inputmode="numeric"
+    placeholder="קוד החדר"
+  >
+
+  <button onclick="joinRoom()">🚀 הצטרפות</button>
+
+  <button class="secondary" onclick="showScreen('home')">
+    ← חזרה
+  </button>
+
+  <div id="joinStatus" class="status"></div>
+
+</section>
+
+
+<!-- LOBBY -->
+<section id="lobby" class="screen">
+
+  <h2 class="title">🏟️ חדר המשחק</h2>
+
+  <p class="subtitle">
+    שלחי לחברה שלך את הקוד:
+  </p>
+
+  <div id="roomCode" class="room-code">------</div>
+
+  <div id="players" class="players"></div>
+
+  <div id="lobbyStatus" class="status">
+    מחכות לשחקנית השנייה...
+  </div>
+
+  <button id="startButton" onclick="startOnlineGame()" disabled>
+    🚀 התחל משחק
+  </button>
+
+  <button class="secondary" onclick="location.reload()">
+    🚪 יציאה
+  </button>
+
+</section>
+
+
+<!-- ONLINE GAME -->
+<section id="game" class="screen">
+
+  <div class="scores">
+
+    <div class="score">
+      👤 <span id="myNameDisplay">---</span>:
+      <b id="myScore">0</b>
+    </div>
+
+    <div class="score">
+      👥 <span id="opponentNameDisplay">---</span>:
+      <b id="opponentScore">0</b>
+    </div>
+
+  </div>
+
+  <div id="questionNumber" class="question-number"></div>
+
+  <div id="question" class="question"></div>
+
+  <div id="answers" class="answers"></div>
+
+  <div id="gameStatus" class="status"></div>
+
+</section>
+
+
+<!-- SOLO -->
+<section id="solo" class="screen">
+
+  <div class="scores">
+    <div class="score">
+      ⭐ ניקוד:
+      <b id="soloScore">0</b>
+    </div>
+  </div>
+
+  <div id="soloQuestionNumber" class="question-number"></div>
+
+  <div id="soloQuestion" class="question"></div>
+
+  <div id="soloAnswers" class="answers"></div>
+
+</section>
+
+
+<!-- RESULT -->
+<section id="result" class="screen">
+
+  <h2 class="title">🏆 המשחק הסתיים!</h2>
+
+  <div id="resultTitle" class="big-result"></div>
+
+  <div id="finalScores" class="players"></div>
+
+  <button onclick="location.reload()">
+    🔄 משחק חדש
+  </button>
+
+</section>
+
+</div>
+</div>
+
+
+<script>
+
+/* =========================
+   QUESTIONS
+========================= */
+
+const questions = [
+
+  {
+    question: "באיזו מדינה נולד ליאו מסי?",
+    answers: ["ארגנטינה", "ספרד", "ברזיל", "אורוגוואי"],
+    correct: 0
+  },
+
+  {
+    question: "באיזה מועדון שיחק מסי במשך רוב הקריירה שלו?",
+    answers: ["ברצלונה", "יובנטוס", "צ'לסי", "ארסנל"],
+    correct: 0
+  },
+
+  {
+    question: "באיזה מספר חולצה מזוהה מסי במיוחד?",
+    answers: ["10", "7", "9", "11"],
+    correct: 0
+  },
+
+  {
+    question: "עם איזו נבחרת זכה מסי במונדיאל 2022?",
+    answers: ["ארגנטינה", "צרפת", "ברזיל", "ספרד"],
+    correct: 0
+  },
+
+  {
+    question: "באיזה מועדון משחק מסי כיום?",
+    answers: ["אינטר מיאמי", "ברצלונה", "פריז סן ז'רמן", "מנצ'סטר סיטי"],
+    correct: 0
+  },
+
+  {
+    question: "איזו קבוצה היא היריבה הגדולה של ברצלונה בקלאסיקו?",
+    answers: ["ריאל מדריד", "מילאן", "ליברפול", "באיירן מינכן"],
+    correct: 0
+  },
+
+  {
+    question: "מהו מספר כדור הזהב של מסי?",
+    answers: ["8", "5", "6", "7"],
+    correct: 0
+  },
+
+  {
+    question: "באיזו עיר משחקת אינטר מיאמי?",
+    answers: ["מיאמי", "ניו יורק", "לוס אנג'לס", "שיקגו"],
+    correct: 0
+  },
+
+  {
+    question: "מהו הכינוי המפורסם של מסי?",
+    answers: ["La Pulga", "El Toro", "El Rey", "El Capitán"],
+    correct: 0
+  },
+
+  {
+    question: "באיזו יבשת נמצאת ארגנטינה?",
+    answers: ["דרום אמריקה", "אירופה", "אסיה", "אפריקה"],
+    correct: 0
+  }
+
+];
+
+
+/* =========================
+   GAME STATE
+========================= */
+
+let peer = null;
+let connection = null;
+
+let isHost = false;
+
+let myName = "";
+let opponentName = "";
+
+let myScore = 0;
+let opponentScore = 0;
+
+let currentQuestion = 0;
+let answered = false;
+
+let soloScore = 0;
+let soloQuestion = 0;
+
+
+/* =========================
+   SCREEN
+========================= */
+
+function showScreen(id) {
+
+  document
+    .querySelectorAll(".screen")
+    .forEach(screen => screen.classList.remove("active"));
+
+  document
+    .getElementById(id)
+    .classList.add("active");
+}
+
+
+/* =========================
+   CREATE ROOM
+========================= */
+
+function createRoom() {
+
+  myName =
+    document.getElementById("homeName").value.trim()
+    || "שחקנית";
+
+  isHost = true;
+
+  showScreen("lobby");
+
+  document.getElementById("lobbyStatus").textContent =
+    "יוצרות חדר...";
+
+  /*
+    יוצרים קוד בן 6 ספרות.
+    ה-Peer ID עצמו כולל את הקוד.
+  */
+
+  const roomCode =
+    Math.floor(100000 + Math.random() * 900000).toString();
+
+  peer = new Peer("messi-battle-" + roomCode);
+
+  peer.on("open", () => {
+
+    document.getElementById("roomCode").textContent =
+      roomCode;
+
+    document.getElementById("lobbyStatus").textContent =
+      "החדר נוצר! שלחי לחברה את הקוד 💙";
+
+  });
+
+
+  peer.on("connection", conn => {
+
+    if (connection) {
+      conn.close();
+      return;
+    }
+
+    connection = conn;
+
+    setupConnection();
+
+  });
+
+
+  peer.on("error", error => {
+
+    console.error(error);
+
+    document.getElementById("lobbyStatus").textContent =
+      "אירעה בעיה ביצירת החדר. נסי לרענן את האתר.";
+
+  });
+
+}
+
+
+/* =========================
+   JOIN ROOM
+========================= */
+
+function joinRoom() {
+
+  myName =
+    document.getElementById("joinName").value.trim()
+    || "שחקנית";
+
+  const code =
+    document.getElementById("roomInput").value
+      .replace(/\D/g, "")
+      .slice(0, 6);
+
+
+  if (code.length !== 6) {
+
+    document.getElementById("joinStatus").textContent =
+      "צריך להכניס קוד בן 6 ספרות 🙂";
+
+    return;
+  }
+
+
+  isHost = false;
+
+  showScreen("lobby");
+
+  document.getElementById("roomCode").textContent =
+    code;
+
+  document.getElementById("lobbyStatus").textContent =
+    "מתחברות לחדר...";
+
+
+  peer = new Peer();
+
+
+  peer.on("open", () => {
+
+    connection =
+      peer.connect(
+        "messi-battle-" + code,
+        { reliable: true }
+      );
+
+    setupConnection();
+
+  });
+
+
+  peer.on("error", error => {
+
+    console.error(error);
+
+    document.getElementById("lobbyStatus").textContent =
+      "לא הצלחנו למצוא את החדר. בדקי שהקוד נכון.";
+
+  });
+
+}
+
+
+/* =========================
+   CONNECTION
+========================= */
+
+function setupConnection() {
+
+  if (!connection) return;
+
+
+  connection.on("open", () => {
+
+    document.getElementById("lobbyStatus").textContent =
+      "התחברנו בהצלחה! 🎉";
+
+    connection.send({
+      type: "player",
+      name: myName
+    });
+
+  });
+
+
+  connection.on("data", message => {
+
+    handleMessage(message);
+
+  });
+
+
+  connection.on("close", () => {
+
+    document.getElementById("gameStatus").textContent =
+      "החיבור עם החברה נסגר.";
+
+  });
+
+}
+
+
+/* =========================
+   MESSAGE HANDLER
+========================= */
+
+function handleMessage(message) {
+
+
+  if (message.type === "player") {
+
+    opponentName = message.name;
+
+    updatePlayers();
+
+    if (isHost) {
+
+      document.getElementById("startButton").disabled =
+        false;
+
+      document.getElementById("lobbyStatus").textContent =
+        "החברה מחוברת! אפשר להתחיל 🔥";
+
+    }
+
+  }
+
+
+  if (message.type === "start") {
+
+    opponentName = message.hostName;
+
+    startOnlineGame(false);
+
+  }
+
+
+  if (message.type === "answer") {
+
+    if (message.correct) {
+
+      opponentScore++;
+
+    }
+
+    updateScores();
+
+  }
+
+}
+
+
+/* =========================
+   PLAYERS
+========================= */
+
+function updatePlayers() {
+
+  document.getElementById("players").innerHTML = `
+
+    <div class="player">
+      🟢 ${escapeHTML(myName)}
+    </div>
+
+    <div class="player">
+      🟢 ${escapeHTML(opponentName || "מחכה...")}
+    </div>
+
+  `;
+
+}
+
+
+/* =========================
+   START ONLINE GAME
+========================= */
+
+function startOnlineGame(sendMessage = true) {
+
+  if (!connection) return;
+
+  if (isHost && !opponentName) return;
+
+
+  myScore = 0;
+  opponentScore = 0;
+  currentQuestion = 0;
+
+
+  if (sendMessage) {
+
+    connection.send({
+      type: "start",
+      hostName: myName
+    });
+
+  }
+
+
+  document.getElementById("myNameDisplay").textContent =
+    myName;
+
+  document.getElementById("opponentNameDisplay").textContent =
+    opponentName || "חברה";
+
+
+  showScreen("game");
+
+  showQuestion();
+
+}
+
+
+/* =========================
+   SHOW QUESTION
+========================= */
+
+function showQuestion() {
+
+  if (currentQuestion >= questions.length) {
+
+    finishOnlineGame();
+
+    return;
+  }
+
+
+  answered = false;
+
+  const q = questions[currentQuestion];
+
+
+  document.getElementById("questionNumber").textContent =
+    `שאלה ${currentQuestion + 1} מתוך ${questions.length}`;
+
+
+  document.getElementById("question").textContent =
+    q.question;
+
+
+  const answersBox =
+    document.getElementById("answers");
+
+  answersBox.innerHTML = "";
+
+
+  q.answers.forEach((answer, index) => {
+
+    const button =
+      document.createElement("button");
+
+    button.className = "answer";
+
+    button.textContent = answer;
+
+    button.onclick = () =>
+      answerQuestion(index, button);
+
+    answersBox.appendChild(button);
+
+  });
+
+
+  updateScores();
+
+}
+
+
+/* =========================
+   ANSWER
+========================= */
+
+function answerQuestion(index, clickedButton) {
+
+  if (answered) return;
+
+  answered = true;
+
+
+  const q = questions[currentQuestion];
+
+  const correct =
+    index === q.correct;
+
+
+  const buttons =
+    document.querySelectorAll("#answers button");
+
+
+  buttons.forEach((button, i) => {
+
+    button.disabled = true;
+
+    if (i === q.correct) {
+
+      button.classList.add("correct");
+
+    }
+
+  });
+
+
+  if (!correct) {
+
+    clickedButton.classList.add("wrong");
+
+  }
+
+
+  if (correct) {
+
+    myScore++;
+
+  }
+
+
+  updateScores();
+
+
+  if (connection) {
+
+    connection.send({
+      type: "answer",
+      correct: correct
+    });
+
+  }
+
+
+  setTimeout(() => {
+
+    currentQuestion++;
+
+    showQuestion();
+
+  }, 900);
+
+}
+
+
+/* =========================
+   SCORES
+========================= */
+
+function updateScores() {
+
+  document.getElementById("myScore").textContent =
+    myScore;
+
+  document.getElementById("opponentScore").textContent =
+    opponentScore;
+
+}
+
+
+/* =========================
+   FINISH
+========================= */
+
+function finishOnlineGame() {
+
+  showScreen("result");
+
+
+  let title;
+
+
+  if (myScore > opponentScore) {
+
+    title = "🏆 ניצחת!";
+
+  } else if (myScore < opponentScore) {
+
+    title = "👏 החברה ניצחה!";
+
+  } else {
+
+    title = "🤝 תיקו!";
+
+  }
+
+
+  document.getElementById("resultTitle").textContent =
+    title;
+
+
+  document.getElementById("finalScores").innerHTML = `
+
+    <div class="player">
+      👑 ${escapeHTML(myName)}: ${myScore}
+    </div>
+
+    <div class="player">
+      ⚽ ${escapeHTML(opponentName || "חברה")}: ${opponentScore}
+    </div>
+
+  `;
+
+}
+
+
+/* =========================
+   SOLO
+========================= */
+
+function startSolo() {
+
+  myName =
+    document.getElementById("homeName").value.trim()
+    || "שחקנית";
+
+  soloScore = 0;
+  soloQuestion = 0;
+
+  showScreen("solo");
+
+  showSoloQuestion();
+
+}
+
+
+function showSoloQuestion() {
+
+  if (soloQuestion >= questions.length) {
+
+    showScreen("result");
+
+    document.getElementById("resultTitle").textContent =
+      `🎉 סיימת עם ${soloScore} מתוך ${questions.length}!`;
+
+    document.getElementById("finalScores").innerHTML = "";
+
+    return;
+  }
+
+
+  const q = questions[soloQuestion];
+
+
+  document.getElementById("soloQuestionNumber").textContent =
+    `שאלה ${soloQuestion + 1} מתוך ${questions.length}`;
+
+
+  document.getElementById("soloQuestion").textContent =
+    q.question;
+
+
+  const box =
+    document.getElementById("soloAnswers");
+
+  box.innerHTML = "";
+
+
+  q.answers.forEach((answer, index) => {
+
+    const button =
+      document.createElement("button");
+
+    button.className = "answer";
+
+    button.textContent = answer;
+
+    button.onclick = () => {
+
+      const buttons =
+        document.querySelectorAll("#soloAnswers button");
+
+      buttons.forEach((b, i) => {
+
+        b.disabled = true;
+
+        if (i === q.correct) {
+
+          b.classList.add("correct");
+
+        }
+
+      });
+
+
+      if (index !== q.correct) {
+
+        button.classList.add("wrong");
+
+      } else {
+
+        soloScore++;
+
+      }
+
+
+      document.getElementById("soloScore").textContent =
+        soloScore;
+
+
+      setTimeout(() => {
+
+        soloQuestion++;
+
+        showSoloQuestion();
+
+      }, 700);
+
+    };
+
+
+    box.appendChild(button);
+
+  });
+
+}
+
+
+/* =========================
+   SECURITY / TEXT
+========================= */
+
+function escapeHTML(text) {
+
+  return String(text).replace(
+    /[&<>"']/g,
+    character => {
+
+      const map = {
+        "&": "&amp;",
+        "<": "&lt;",
+        ">": "&gt;",
+        '"': "&quot;",
+        "'": "&#039;"
+      };
+
+      return map[character];
+
+    }
+  );
+
+}
+
+</script>
+
+</body>
+  </html>
